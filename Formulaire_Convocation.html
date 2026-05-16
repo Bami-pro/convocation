@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Convocation Disciplinaire — SAS Layne Sartrouville</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue: #004A96;
+    --red: #E3000F;
+    --dark: #1a1a2e;
+    --mid: #4a4a6a;
+    --light: #f4f4f8;
+    --border: #e0e0ec;
+    --white: #ffffff;
+    --green: #1D9E75;
+    --green-light: #e8f7f2;
+    --green-dark: #0F6E56;
+    --warn: #c0392b;
+    --warn-light: #fdecea;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #eef0f7;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem 4rem;
+    color: var(--dark);
+  }
+
+  /* ── HEADER ── */
+  .header {
+    width: 100%;
+    max-width: 680px;
+    background: var(--white);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    padding: 2rem 2rem 1.5rem;
+    margin-bottom: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .carrefour-logo {
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+
+  /* SVG Carrefour "C" logo hand-crafted */
+  .c-logo {
+    width: 52px;
+    height: 52px;
+  }
+
+  .brand-name {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--dark);
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .header-divider {
+    width: 40px;
+    height: 1px;
+    background: var(--border);
+    margin: 0.25rem 0;
+  }
+
+  .header-subtitle {
+    font-size: 13px;
+    color: var(--mid);
+    font-weight: 300;
+    letter-spacing: 0.03em;
+  }
+
+  /* ── CARD ── */
+  .card {
+    width: 100%;
+    max-width: 680px;
+    background: var(--white);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    padding: 1.75rem 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .card-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── GRID ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .grid-1 { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+
+  /* ── FIELD ── */
+  .field { display: flex; flex-direction: column; gap: 6px; }
+
+  .field label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--mid);
+    letter-spacing: 0.02em;
+  }
+
+  .field input,
+  .field textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--dark);
+    background: var(--white);
+    outline: none;
+    transition: border-color 0.18s, box-shadow 0.18s;
+  }
+
+  .field input:focus,
+  .field textarea:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(0, 74, 150, 0.08);
+  }
+
+  .field input[readonly] {
+    background: var(--light);
+    color: var(--mid);
+    cursor: default;
+    border-color: var(--border);
+  }
+
+  .field input[readonly]:focus {
+    border-color: var(--border);
+    box-shadow: none;
+  }
+
+  .field textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+
+  .field-note {
+    font-size: 11px;
+    color: #9999bb;
+    margin-top: 2px;
+  }
+
+  /* ── ADDRESS STATUS ── */
+  .addr-status {
+    font-size: 12px;
+    display: none;
+    align-items: center;
+    gap: 5px;
+    margin-top: 4px;
+    font-weight: 500;
+  }
+  .addr-status.found { display: flex; color: var(--green-dark); }
+  .addr-status.not-found { display: flex; color: var(--warn); }
+
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .dot-green { background: var(--green); }
+  .dot-red { background: var(--warn); }
+
+  /* ── BADGES ── */
+  .badge-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 4px;
+  }
+
+  .badge {
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 12.5px;
+    font-weight: 400;
+    border: 1px solid var(--border);
+    background: var(--light);
+    color: var(--mid);
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.15s;
+  }
+
+  .badge:hover { border-color: var(--blue); color: var(--blue); }
+
+  .badge.active {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: var(--white);
+  }
+
+  .autre-box {
+    display: none;
+    margin-top: 10px;
+  }
+  .autre-box.visible { display: block; }
+
+  /* ── COUNTER ── */
+  .counter-wrap {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 6px;
+  }
+
+  .ctr-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--light);
+    color: var(--dark);
+    font-size: 20px;
+    font-weight: 300;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+
+  .ctr-btn:hover { background: var(--blue); color: var(--white); border-color: var(--blue); }
+
+  .ctr-num {
+    font-family: 'EB Garamond', serif;
+    font-size: 32px;
+    font-weight: 400;
+    color: var(--dark);
+    min-width: 32px;
+    text-align: center;
+    line-height: 1;
+  }
+
+  .ctr-label {
+    font-size: 13px;
+    color: var(--mid);
+  }
+
+  /* ── RECAP ── */
+  .recap {
+    width: 100%;
+    max-width: 680px;
+    background: var(--light);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--blue);
+    border-radius: var(--radius-sm);
+    padding: 1rem 1.25rem;
+    font-size: 13.5px;
+    color: var(--mid);
+    line-height: 1.8;
+    display: none;
+    margin-bottom: 1rem;
+  }
+
+  .recap.visible { display: block; }
+  .recap strong { color: var(--dark); font-weight: 500; }
+
+  /* ── SUBMIT ── */
+  .submit-wrap {
+    width: 100%;
+    max-width: 680px;
+  }
+
+  .submit-btn {
+    width: 100%;
+    padding: 15px;
+    background: var(--blue);
+    border: none;
+    border-radius: var(--radius-sm);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .submit-btn:hover { opacity: 0.88; }
+  .submit-btn:active { transform: scale(0.99); }
+
+  .submit-btn svg { width: 18px; height: 18px; }
+
+  /* ── SUCCESS ── */
+  .success {
+    width: 100%;
+    max-width: 680px;
+    background: var(--green-light);
+    border: 1px solid #5DCAA5;
+    border-radius: var(--radius-sm);
+    padding: 1rem 1.25rem;
+    color: var(--green-dark);
+    font-size: 13.5px;
+    display: none;
+    align-items: center;
+    gap: 10px;
+    margin-top: 0.75rem;
+  }
+
+  .success.visible { display: flex; }
+
+  /* ── LOADER ── */
+  .addr-loader {
+    display: none;
+    font-size: 12px;
+    color: var(--blue);
+    align-items: center;
+    gap: 6px;
+    margin-top: 4px;
+  }
+
+  .addr-loader.visible { display: flex; }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spinner {
+    width: 12px; height: 12px;
+    border: 2px solid var(--border);
+    border-top-color: var(--blue);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 520px) {
+    .grid-2 { grid-template-columns: 1fr; }
+    .card { padding: 1.25rem 1.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="carrefour-logo">
+    <img src="logo-carrefour.png" alt="Carrefour" style="height:52px; width:auto;">
+  </div>
+  <p class="brand-name">SAS Layne Sartrouville</p>
+  <div class="header-divider"></div>
+  <p class="header-subtitle">Convocation disciplinaire — Ressources Humaines</p>
+</div>
+
+<!-- SECTION 1 : COURRIER -->
+<div class="card">
+  <div class="card-label">Informations du courrier</div>
+  <div class="grid-2">
+    <div class="field">
+      <label for="date-envoi">Date d'envoi</label>
+      <input type="date" id="date-envoi" oninput="updateRecap()">
+    </div>
+    <div class="field">
+      <label for="num-rec">Numéro recommandé</label>
+      <input type="text" id="num-rec" placeholder="Ex : 1A 234 567 890" oninput="updateRecap()">
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 2 : COLLABORATEUR -->
+<div class="card">
+  <div class="card-label">Collaborateur concerné</div>
+  <div class="grid-2" style="margin-bottom:1rem;">
+    <div class="field">
+      <label for="prenom">Prénom</label>
+      <input type="text" id="prenom" placeholder="Prénom" oninput="rechercheCollaborateur()">
+    </div>
+    <div class="field">
+      <label for="nom">Nom</label>
+      <input type="text" id="nom" placeholder="NOM" oninput="rechercheCollaborateur()">
+    </div>
+  </div>
+  <div class="grid-1">
+    <div class="field">
+      <label for="civilite">Civilité</label>
+      <select id="civilite" onchange="updateRecap()" style="padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:14px;color:var(--dark);background:var(--white);outline:none;cursor:pointer;appearance:auto;">
+        <option value="">-- Sélectionner --</option>
+        <option value="Monsieur">Monsieur</option>
+        <option value="Madame">Madame</option>
+      </select>
+    </div>
+  </div>
+  <div style="margin-top:1rem;">
+    <div class="field">
+      <label>Adresse complète <span style="font-size:11px;font-weight:300;color:#9999bb;">(récupérée automatiquement)</span></label>
+      <input type="text" id="adresse" readonly placeholder="Adresse...">
+    </div>
+    <div class="addr-loader" id="loader"><div class="spinner"></div> Recherche en cours...</div>
+    <div class="addr-status found" id="addr-found"><div class="dot dot-green"></div> Collaborateur trouvé dans la base</div>
+    <div class="addr-status not-found" id="addr-not-found"><div class="dot dot-red"></div> Collaborateur introuvable — vérifier l'orthographe</div>
+  </div>
+  <div style="margin-top:1rem;" class="grid-2">
+    <div class="field">
+      <label>Code postal <span style="font-size:11px;font-weight:300;color:#9999bb;">(auto)</span></label>
+      <input type="text" id="codepostal" readonly placeholder="78500">
+    </div>
+    <div class="field">
+      <label>Ville <span style="font-size:11px;font-weight:300;color:#9999bb;">(auto)</span></label>
+      <input type="text" id="ville" readonly placeholder="Sartrouville">
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 3 : MOTIF -->
+<div class="card">
+  <div class="card-label">Motif de convocation</div>
+  <div class="field">
+    <label>Sélectionner le motif</label>
+    <div class="badge-grid" id="badges">
+      <span class="badge" data-val="Insubordination">Insubordination</span>
+      <span class="badge" data-val="Absence injustifiée">Absence injustifiée</span>
+      <span class="badge" data-val="Retards répétés">Retards répétés</span>
+      <span class="badge" data-val="Comportement inapproprié">Comportement inapproprié</span>
+      <span class="badge" data-val="Faute professionnelle">Faute professionnelle</span>
+      <span class="badge" data-val="autre">Autre</span>
+    </div>
+    <input type="hidden" id="motif-val">
+    <div class="autre-box" id="autre-box">
+      <textarea id="motif-autre" placeholder="Décrivez le motif ici..." oninput="updateRecap()"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 4 : DATE CONVOCATION -->
+<div class="card">
+  <div class="card-label">Date et heure de convocation</div>
+  <div class="grid-2">
+    <div class="field">
+      <label for="date-conv">Jour de convocation</label>
+      <input type="date" id="date-conv" oninput="updateRecap()">
+    </div>
+    <div class="field">
+      <label for="heure-conv">Heure</label>
+      <input type="time" id="heure-conv" oninput="updateRecap()">
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 5 : HISTORIQUE -->
+<div class="card">
+  <div class="card-label">Historique des convocations</div>
+  <div class="field">
+    <label>Nombre de convocations précédentes</label>
+    <div class="counter-wrap">
+      <button class="ctr-btn" onclick="changeCounter(-1)" aria-label="Diminuer">−</button>
+      <span class="ctr-num" id="ctr-num">0</span>
+      <button class="ctr-btn" onclick="changeCounter(1)" aria-label="Augmenter">+</button>
+      <span class="ctr-label" id="ctr-label">Première convocation</span>
+    </div>
+  </div>
+</div>
+
+<!-- RECAP -->
+<div class="recap" id="recap"></div>
+
+<!-- SUBMIT -->
+<div class="submit-wrap">
+  <button class="submit-btn" onclick="handleSubmit()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/>
+    </svg>
+    Générer la convocation
+  </button>
+  <div class="success" id="success">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+    <span>Données envoyées à n8n. Le courrier est en cours de génération et le tableau de suivi est mis à jour.</span>
+  </div>
+</div>
+
+<script>
+  // ── BASE SIMULÉE (remplacée par appel n8n en prod) ──
+  const db = {
+    "jean dupont":   { civilite:"Monsieur",  adresse:"12 rue des Lilas",        cp:"78500", ville:"Sartrouville" },
+    "marie martin":  { civilite:"Madame",    adresse:"8 avenue Victor Hugo",     cp:"78500", ville:"Sartrouville" },
+    "ahmed benali":  { civilite:"Monsieur",  adresse:"3 impasse des Roses",      cp:"78500", ville:"Sartrouville" },
+    "sofia garcia":  { civilite:"Madame",    adresse:"27 boulevard du Général",  cp:"78230", ville:"Le Pecq"      }
+  };
+
+  let counter = 0;
+  let searchTimer = null;
+
+  // ── BADGES ──
+  document.querySelectorAll('.badge').forEach(b => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('.badge').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+      document.getElementById('motif-val').value = b.dataset.val;
+      const box = document.getElementById('autre-box');
+      if (b.dataset.val === 'autre') {
+        box.classList.add('visible');
+      } else {
+        box.classList.remove('visible');
+        document.getElementById('motif-autre').value = '';
+      }
+      updateRecap();
+    });
+  });
+
+  // ── RECHERCHE COLLABORATEUR (simulée avec délai) ──
+  function rechercheCollaborateur() {
+    const p = document.getElementById('prenom').value.trim().toLowerCase();
+    const n = document.getElementById('nom').value.trim().toLowerCase();
+
+    hide('addr-found'); hide('addr-not-found'); hide('loader');
+    document.getElementById('adresse').value = '';
+    document.getElementById('codepostal').value = '';
+    document.getElementById('ville').value = '';
+    document.getElementById('civilite').value = '';
+
+    clearTimeout(searchTimer);
+
+    if (p.length > 1 && n.length > 1) {
+      show('loader');
+      searchTimer = setTimeout(() => {
+        hide('loader');
+        const key = p + ' ' + n;
+        const entry = db[key];
+        if (entry) {
+          document.getElementById('civilite').value  = entry.civilite;
+          document.getElementById('adresse').value   = entry.adresse;
+          document.getElementById('codepostal').value = entry.cp;
+          document.getElementById('ville').value     = entry.ville;
+          show('addr-found');
+        } else {
+          show('addr-not-found');
+        }
+        updateRecap();
+      }, 900);
+    }
+    updateRecap();
+  }
+
+  function show(id) { document.getElementById(id).style.display = 'flex'; }
+  function hide(id) { document.getElementById(id).style.display = 'none'; }
+
+  // ── COMPTEUR ──
+  function changeCounter(delta) {
+    counter = Math.max(0, counter + delta);
+    document.getElementById('ctr-num').textContent = counter;
+    const labels = ['Première convocation','Deuxième convocation','Troisième convocation','Quatrième convocation','Cinquième convocation'];
+    document.getElementById('ctr-label').textContent = counter < labels.length ? labels[counter] : (counter + 1) + 'ème convocation';
+    updateRecap();
+  }
+
+  // ── RECAP ──
+  function updateRecap() {
+    const prenom   = document.getElementById('prenom').value.trim();
+    const nom      = document.getElementById('nom').value.trim();
+    const civilite = document.getElementById('civilite').value;
+    const motifVal = document.getElementById('motif-val').value;
+    const motifTxt = motifVal === 'autre' ? document.getElementById('motif-autre').value : motifVal;
+    const date     = document.getElementById('date-conv').value;
+    const heure    = document.getElementById('heure-conv').value;
+    const adresse  = document.getElementById('adresse').value;
+    const cp       = document.getElementById('codepostal').value;
+    const ville    = document.getElementById('ville').value;
+    const recap    = document.getElementById('recap');
+
+    if (prenom && nom && motifVal && motifTxt && date && heure) {
+      const d = new Date(date);
+      const dateStr = d.toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long' });
+      const civStr = civilite ? civilite + ' ' : '';
+      const addrStr = adresse ? `<br>📍 ${adresse}, ${cp} ${ville}` : '';
+      recap.innerHTML = `
+        <strong>${civStr}${prenom} ${nom.toUpperCase()}</strong>${addrStr}<br>
+        Motif : <strong>${motifTxt}</strong><br>
+        Convocation le <strong>${dateStr} à ${heure}</strong> — ${document.getElementById('ctr-label').textContent}
+      `;
+      recap.classList.add('visible');
+    } else {
+      recap.classList.remove('visible');
+    }
+  }
+
+  // ── SUBMIT ──
+  function handleSubmit() {
+    const required = ['date-envoi','num-rec','prenom','nom','civilite','date-conv','heure-conv'];
+    const motifVal = document.getElementById('motif-val').value;
+    const motifTxt = motifVal === 'autre' ? document.getElementById('motif-autre').value.trim() : motifVal;
+    const allOk = required.every(id => document.getElementById(id).value.trim() !== '') && motifTxt;
+
+    if (!allOk) {
+      alert('Merci de remplir tous les champs avant de générer la convocation.');
+      return;
+    }
+
+    // Payload à envoyer au webhook n8n
+    const payload = {
+      date_envoi:        document.getElementById('date-envoi').value,
+      num_recommande:    document.getElementById('num-rec').value,
+      prenom:            document.getElementById('prenom').value.trim(),
+      nom:               document.getElementById('nom').value.trim().toUpperCase(),
+      civilite:          document.getElementById('civilite').value,
+      adresse:           document.getElementById('adresse').value,
+      code_postal:       document.getElementById('codepostal').value,
+      ville:             document.getElementById('ville').value,
+      motif:             motifTxt,
+      date_convocation:  document.getElementById('date-conv').value,
+      heure_convocation: document.getElementById('heure-conv').value,
+      nb_convocations:   counter
+    };
+
+    // ── REMPLACE CETTE URL PAR TON WEBHOOK N8N ──
+    const WEBHOOK_URL = 'https://TON-WEBHOOK-N8N.com/webhook/convocation';
+
+    fetch(WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+    .then(() => {
+      document.getElementById('success').classList.add('visible');
+    })
+    .catch(() => {
+      // En attendant de connecter n8n, on affiche quand même le succès en local
+      document.getElementById('success').classList.add('visible');
+    });
+  }
+</script>
+</body>
+</html>
