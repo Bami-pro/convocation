@@ -258,18 +258,24 @@
   .ctr-btn:hover { background: var(--blue); color: var(--white); border-color: var(--blue); }
 
   .ctr-num {
-    font-family: 'EB Garamond', serif;
-    font-size: 32px;
-    font-weight: 400;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 22px;
+    font-weight: 500;
     color: var(--dark);
     min-width: 32px;
     text-align: center;
-    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
   }
 
   .ctr-label {
     font-size: 13px;
     color: var(--mid);
+    display: flex;
+    align-items: center;
+    height: 36px;
   }
 
   /* ── RECAP ── */
@@ -638,7 +644,7 @@
     };
 
     // ── REMPLACE CETTE URL PAR TON WEBHOOK N8N ──
-    const WEBHOOK_URL = 'https://TON-WEBHOOK-N8N.com/webhook/convocation';
+    const WEBHOOK_URL = 'https://bamipro.app.n8n.cloud/webhook-test/convocation';
 
     fetch(WEBHOOK_URL, {
       method: 'POST',
