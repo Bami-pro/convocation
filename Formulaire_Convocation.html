@@ -394,7 +394,7 @@
 <div class="card">
   <div class="card-label">Historique des convocations</div>
   <div class="field">
-    <label>Nombre de convocations précédentes</label>
+    <label>Nombre de convocations</label>
     <div class="counter-wrap">
       <button class="ctr-btn" onclick="changeCounter(-1)" aria-label="Diminuer">−</button>
       <span class="ctr-num" id="ctr-num">0</span>
@@ -484,7 +484,7 @@
       const addrStr = (currentMode === 'manual' && adresse)
         ? `<br>📍 ${adresse}, ${cp} ${ville}`
         : '';
-      const histStr = counter === 0 ? 'aucune convocation précédente' : counter + ' convocation(s) précédente(s)';
+      const histStr = counter === 0 ? 'aucune convocation' : counter + ' convocation(s)';
       recap.innerHTML = `
         <strong>${civStr}${prenom} ${nom.toUpperCase()}</strong>${addrStr}<br>
         Motif : <strong>${motifTxt}</strong><br>
