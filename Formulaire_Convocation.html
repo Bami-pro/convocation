@@ -18,8 +18,6 @@
     --green: #1D9E75;
     --green-light: #e8f7f2;
     --green-dark: #0F6E56;
-    --warn: #c0392b;
-    --warn-light: #fdecea;
     --radius: 12px;
     --radius-sm: 8px;
   }
@@ -93,37 +91,8 @@
     height: 1px;
     background: var(--border);
   }
-  .mode-toggle {
-    display: inline-flex;
-    background: var(--light);
-    border: 1px solid var(--border);
-    border-radius: 100px;
-    padding: 3px;
-    gap: 2px;
-    margin-bottom: 0.5rem;
-  }
-  .mode-btn {
-    padding: 7px 18px;
-    border: none;
-    background: transparent;
-    border-radius: 100px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 12.5px;
-    font-weight: 500;
-    color: var(--mid);
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .mode-btn:hover { color: var(--blue); }
-  .mode-btn.active { background: var(--blue); color: var(--white); }
-  .mode-btn.active:hover { color: var(--white); }
-  .mode-hint {
-    font-size: 11.5px;
-    color: #9999bb;
-    margin-bottom: 1.25rem;
-    font-weight: 300;
-  }
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 1rem; }
   .grid-1 { display: grid; grid-template-columns: 1fr; gap: 1rem; }
   .field { display: flex; flex-direction: column; gap: 6px; }
   .field label {
@@ -149,78 +118,6 @@
   .field textarea:focus {
     border-color: var(--blue);
     box-shadow: 0 0 0 3px rgba(0, 74, 150, 0.08);
-  }
-  .field input[readonly] {
-    background: var(--light);
-    color: var(--mid);
-    cursor: default;
-    border-color: var(--border);
-  }
-  .field input[readonly]:focus {
-    border-color: var(--border);
-    box-shadow: none;
-  }
-  .field textarea { resize: vertical; min-height: 80px; }
-  .auto-tag {
-    font-size: 11px;
-    font-weight: 300;
-    color: #9999bb;
-  }
-  .badge-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 4px;
-  }
-  .badge {
-    padding: 6px 14px;
-    border-radius: 100px;
-    font-size: 12.5px;
-    font-weight: 400;
-    border: 1px solid var(--border);
-    background: var(--light);
-    color: var(--mid);
-    cursor: pointer;
-    user-select: none;
-    transition: all 0.15s;
-  }
-  .badge:hover { border-color: var(--blue); color: var(--blue); }
-  .badge.active { background: var(--blue); border-color: var(--blue); color: var(--white); }
-  .autre-box { display: none; margin-top: 10px; }
-  .autre-box.visible { display: block; }
-  .counter-wrap {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 6px;
-  }
-  .ctr-btn {
-    width: 38px; height: 38px;
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--border);
-    background: var(--light);
-    color: var(--dark);
-    font-size: 20px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.15s;
-    flex-shrink: 0;
-    padding: 0;
-    line-height: 1;
-  }
-  .ctr-btn:hover { background: var(--blue); color: var(--white); border-color: var(--blue); }
-  .ctr-num {
-    font-size: 20px;
-    font-weight: 500;
-    width: 56px; height: 38px;
-    line-height: 38px;
-    text-align: center;
-    display: inline-block;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    background: var(--white);
   }
   .recap {
     width: 100%;
@@ -276,7 +173,7 @@
   }
   .success.visible { display: flex; }
   @media (max-width: 520px) {
-    .grid-2 { grid-template-columns: 1fr; }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
     .card { padding: 1.25rem 1.25rem; }
   }
 </style>
@@ -284,7 +181,6 @@
 <body>
 
 <div class="header">
-  <img src="logo-carrefour.png" alt="Carrefour" style="height:52px; width:auto;">
   <p class="brand-name">SAS Layne Sartrouville</p>
   <div class="header-divider"></div>
   <p class="header-subtitle">Convocation disciplinaire — Ressources Humaines</p>
@@ -309,12 +205,6 @@
 <div class="card">
   <div class="card-label">Collaborateur concerné</div>
 
-  <div class="mode-toggle">
-    <button type="button" class="mode-btn active" id="mode-auto" onclick="setMode('auto')">🔗 Automatique</button>
-    <button type="button" class="mode-btn" id="mode-manual" onclick="setMode('manual')">✍️ Manuel</button>
-  </div>
-  <p class="mode-hint" id="mode-hint">Mode automatique : n8n récupèrera l'adresse depuis la base de données.</p>
-
   <div class="grid-2" style="margin-bottom:1rem;">
     <div class="field">
       <label for="prenom">Prénom</label>
@@ -326,7 +216,7 @@
     </div>
   </div>
 
-  <div class="grid-1" style="margin-bottom:1rem;">
+  <div class="grid-2" style="margin-bottom:1rem;">
     <div class="field">
       <label for="civilite">Civilité</label>
       <select id="civilite" onchange="updateRecap()" style="padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:14px;color:var(--dark);background:var(--white);outline:none;cursor:pointer;appearance:auto;">
@@ -337,45 +227,30 @@
     </div>
   </div>
 
-  <div id="champs-adresse" style="display:none;">
-    <div class="field" style="margin-bottom:1rem;">
-      <label>Adresse complète</label>
-      <input type="text" id="adresse" placeholder="Adresse..." oninput="updateRecap()">
+  <div class="grid-3" style="margin-bottom:1rem;">
+    <div class="field">
+      <label for="numero-rue">N° rue</label>
+      <input type="text" id="numero-rue" placeholder="12" oninput="updateRecap()">
     </div>
-    <div class="grid-2">
-      <div class="field">
-        <label>Code postal</label>
-        <input type="text" id="codepostal" placeholder="78500" oninput="updateRecap()">
-      </div>
-      <div class="field">
-        <label>Ville</label>
-        <input type="text" id="ville" placeholder="Sartrouville" oninput="updateRecap()">
-      </div>
+    <div class="field">
+      <label for="rue">Rue</label>
+      <input type="text" id="rue" placeholder="Rue de la République" oninput="updateRecap()">
+    </div>
+    <div class="field">
+      <label for="codepostal">Code postal</label>
+      <input type="text" id="codepostal" placeholder="78500" oninput="updateRecap()">
+    </div>
+  </div>
+
+  <div class="grid-1">
+    <div class="field">
+      <label for="ville">Ville</label>
+      <input type="text" id="ville" placeholder="Sartrouville" oninput="updateRecap()">
     </div>
   </div>
 </div>
 
-<!-- SECTION 3 : MOTIF -->
-<div class="card">
-  <div class="card-label">Motif de convocation</div>
-  <div class="field">
-    <label>Sélectionner le motif</label>
-    <div class="badge-grid" id="badges">
-      <span class="badge" data-val="Insubordination">Insubordination</span>
-      <span class="badge" data-val="Absence injustifiée">Absence injustifiée</span>
-      <span class="badge" data-val="Retards répétés">Retards répétés</span>
-      <span class="badge" data-val="Comportement inapproprié">Comportement inapproprié</span>
-      <span class="badge" data-val="Faute professionnelle">Faute professionnelle</span>
-      <span class="badge" data-val="autre">Autre</span>
-    </div>
-    <input type="hidden" id="motif-val">
-    <div class="autre-box" id="autre-box">
-      <textarea id="motif-autre" placeholder="Décrivez le motif ici..." oninput="updateRecap()"></textarea>
-    </div>
-  </div>
-</div>
-
-<!-- SECTION 4 : DATE CONVOCATION -->
+<!-- SECTION 3 : DATE CONVOCATION -->
 <div class="card">
   <div class="card-label">Date et heure de convocation</div>
   <div class="grid-2">
@@ -386,19 +261,6 @@
     <div class="field">
       <label for="heure-conv">Heure</label>
       <input type="time" id="heure-conv" oninput="updateRecap()">
-    </div>
-  </div>
-</div>
-
-<!-- SECTION 5 : HISTORIQUE -->
-<div class="card">
-  <div class="card-label">Historique des convocations</div>
-  <div class="field">
-    <label>Nombre de convocations</label>
-    <div class="counter-wrap">
-      <button class="ctr-btn" onclick="changeCounter(-1)" aria-label="Diminuer">−</button>
-      <span class="ctr-num" id="ctr-num">0</span>
-      <button class="ctr-btn" onclick="changeCounter(1)" aria-label="Augmenter">+</button>
     </div>
   </div>
 </div>
@@ -416,79 +278,32 @@
   </button>
   <div class="success" id="success">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-    <span>Données envoyées à n8n. Le courrier est en cours de génération et le tableau de suivi est mis à jour.</span>
+    <span>Données envoyées à n8n. La convocation est en cours de génération et d'envoi par email.</span>
   </div>
 </div>
 
 <script>
-  let counter = 0;
-  let currentMode = 'auto';
-
-  function setMode(mode) {
-    currentMode = mode;
-    document.getElementById('mode-auto').classList.toggle('active', mode === 'auto');
-    document.getElementById('mode-manual').classList.toggle('active', mode === 'manual');
-    const champsAdresse = document.getElementById('champs-adresse');
-    const hint = document.getElementById('mode-hint');
-    if (mode === 'manual') {
-      champsAdresse.style.display = 'block';
-      hint.textContent = "Mode manuel : saisissez librement l'adresse, le code postal et la ville.";
-    } else {
-      champsAdresse.style.display = 'none';
-      document.getElementById('adresse').value = '';
-      document.getElementById('codepostal').value = '';
-      document.getElementById('ville').value = '';
-      hint.textContent = "Mode automatique : n8n récupèrera l'adresse depuis la base de données.";
-    }
-    updateRecap();
-  }
-
-  document.querySelectorAll('.badge').forEach(b => {
-    b.addEventListener('click', () => {
-      document.querySelectorAll('.badge').forEach(x => x.classList.remove('active'));
-      b.classList.add('active');
-      document.getElementById('motif-val').value = b.dataset.val;
-      const box = document.getElementById('autre-box');
-      if (b.dataset.val === 'autre') {
-        box.classList.add('visible');
-      } else {
-        box.classList.remove('visible');
-        document.getElementById('motif-autre').value = '';
-      }
-      updateRecap();
-    });
-  });
-
-  function changeCounter(delta) {
-    counter = Math.max(0, counter + delta);
-    document.getElementById('ctr-num').textContent = counter;
-    updateRecap();
-  }
-
   function updateRecap() {
     const prenom   = document.getElementById('prenom').value.trim();
     const nom      = document.getElementById('nom').value.trim();
     const civilite = document.getElementById('civilite').value;
-    const motifVal = document.getElementById('motif-val').value;
-    const motifTxt = motifVal === 'autre' ? document.getElementById('motif-autre').value : motifVal;
     const date     = document.getElementById('date-conv').value;
     const heure    = document.getElementById('heure-conv').value;
-    const adresse  = document.getElementById('adresse').value;
+    const numRue   = document.getElementById('numero-rue').value;
+    const rue      = document.getElementById('rue').value;
     const cp       = document.getElementById('codepostal').value;
     const ville    = document.getElementById('ville').value;
     const recap    = document.getElementById('recap');
-    if (prenom && nom && motifVal && motifTxt && date && heure) {
+    if (prenom && nom && date && heure) {
       const d = new Date(date);
       const dateStr = d.toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long' });
       const civStr  = civilite ? civilite + ' ' : '';
-      const addrStr = (currentMode === 'manual' && adresse)
-        ? `<br>📍 ${adresse}, ${cp} ${ville}`
+      const addrStr = (numRue || rue || cp || ville)
+        ? `<br>📍 ${numRue} ${rue}, ${cp} ${ville}`
         : '';
-      const histStr = counter === 0 ? 'aucune convocation' : counter + ' convocation(s)';
       recap.innerHTML = `
         <strong>${civStr}${prenom} ${nom.toUpperCase()}</strong>${addrStr}<br>
-        Motif : <strong>${motifTxt}</strong><br>
-        Convocation le <strong>${dateStr} à ${heure}</strong> — ${histStr}
+        Convocation le <strong>${dateStr} à ${heure}</strong>
       `;
       recap.classList.add('visible');
     } else {
@@ -497,28 +312,24 @@
   }
 
   function handleSubmit() {
-    const required = ['date-envoi','num-rec','prenom','nom','civilite','date-conv','heure-conv'];
-    const motifVal = document.getElementById('motif-val').value;
-    const motifTxt = motifVal === 'autre' ? document.getElementById('motif-autre').value.trim() : motifVal;
-    const allOk = required.every(id => document.getElementById(id).value.trim() !== '') && motifTxt;
+    const required = ['date-envoi','num-rec','prenom','nom','civilite','numero-rue','rue','codepostal','ville','date-conv','heure-conv'];
+    const allOk = required.every(id => document.getElementById(id).value.trim() !== '');
     if (!allOk) {
       alert('Merci de remplir tous les champs avant de générer la convocation.');
       return;
     }
     const payload = {
-      mode_adresse:      currentMode,
       date_envoi:        document.getElementById('date-envoi').value,
       num_recommande:    document.getElementById('num-rec').value,
       prenom:            document.getElementById('prenom').value.trim(),
       nom:               document.getElementById('nom').value.trim(),
       civilite:          document.getElementById('civilite').value,
-      adresse:           currentMode === 'manual' ? document.getElementById('adresse').value : '',
-      code_postal:       currentMode === 'manual' ? document.getElementById('codepostal').value : '',
-      ville:             currentMode === 'manual' ? document.getElementById('ville').value : '',
-      motif:             motifTxt,
+      numero_rue:        document.getElementById('numero-rue').value,
+      rue:               document.getElementById('rue').value,
+      code_postal:       document.getElementById('codepostal').value,
+      ville:             document.getElementById('ville').value,
       date_convocation:  document.getElementById('date-conv').value,
-      heure_convocation: document.getElementById('heure-conv').value,
-      nb_convocations:   counter
+      heure_convocation: document.getElementById('heure-conv').value
     };
     const WEBHOOK_URL = 'https://bamipro.app.n8n.cloud/webhook-test/convocation';
     fetch(WEBHOOK_URL, {
